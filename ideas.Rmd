@@ -1,0 +1,54 @@
+---
+title: "ideas"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries}
+library(tidyverse)     # for graphing and data cleaning
+library(lubridate)     # for date manipulation
+library(ggthemes)# for even more plotting themes
+library(janitor)
+library(geomtextpath)
+theme_set(theme_minimal()) # My favorite ggplot() theme :)
+```
+
+
+```{r}
+cancer <- read_csv("total-cancer-deaths-by-type.csv")
+```
+
+```{r}
+cancer <- cancer %>% 
+  pivot_longer(cols = starts_with("Death"),
+               names_to = "Type_of_cancer",
+               values_to = "Death_count") %>% 
+  mutate(Cancer_type = str_sub(Type_of_cancer, 10, -37)) %>% 
+  select(-Type_of_cancer)
+```
+
+```{r}
+cancer %>% 
+  filter(Code == "USA") %>% 
+  filter(Death_count >= 25000) %>% 
+  ggplot(aes(x = Year, y = Death_count, color = Cancer_type, label = Cancer_type)) +
+  geom_labelline(straight = TRUE, size = 3, ) +
+  labs(x = "",y = "",title = "Number of Cancer Deaths in the US from 1990-2019 by Type of Cancer") +
+  theme(legend.position = "none")
+```
+```{r}
+cancer %>%
+  group_by(Cancer_type, Year) %>% 
+  mutate(Death_count_sum = sum(Death_count)) %>% 
+  ggplot(aes(x = Year, y = Death_count_sum, color = Cancer_type)) +
+    geom_line()
+```
+
+```{r}
+
+```
+
+
