@@ -1,11 +1,19 @@
 ---
-title: "ideas"
-output: html_document
+title: "COMP 112 FINAL PROJECT"
+author: "Tam, Ting and Chris"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    df_print: paged
+    code_download: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+[link to git collab](https://github.com/thuang111/Ting_Tam_Chris_final_project)
 
 ```{r libraries}
 library(tidyverse)     # for graphing and data cleaning
@@ -13,16 +21,35 @@ library(lubridate)     # for date manipulation
 library(ggthemes)# for even more plotting themes
 library(janitor)
 library(geomtextpath)
+library(tidyr)
+library(maps)          # for map data
+library(ggmap)         # for mapping points on maps
+library(patchwork)
 theme_set(theme_minimal()) # My favorite ggplot() theme :)
 ```
 
-
-```{r}
-cancer <- read_csv("total-cancer-deaths-by-type.csv")
+```{r loading world bank pop and world map}
+data("world_bank_pop") #pop data only available from 2000 to 2017. So we might want to filter out some years from the original data set - Tam
+world_map <- map_data("world") #coordinates of countries
 ```
 
-```{r}
-cancer <- cancer %>% 
+```{r reordering world bank pop dataset}
+world_pop_new <- world_bank_pop %>% 
+  pivot_longer(cols = starts_with("20") ,
+              names_to = "year",
+              values_to = "value") %>% 
+  pivot_wider(names_from = indicator,
+              values_from =  value) %>% 
+  rename(country_code = country, population_growth = SP.POP.GROW ,  total_population = SP.POP.TOTL, urban_population_growth = SP.URB.GROW , total_urban_population = SP.URB.TOTL) 
+```
+
+```{r loading raw cancer data}
+cancer_og <- read_csv("total-cancer-deaths-by-type.csv")
+```
+
+
+```{r cleaning up the variables}
+cancer <- cancer_og %>% 
   pivot_longer(cols = starts_with("Death"),
                names_to = "Type_of_cancer",
                values_to = "Death_count") %>% 
@@ -30,25 +57,74 @@ cancer <- cancer %>%
   select(-Type_of_cancer)
 ```
 
-```{r}
-cancer %>% 
+
+
+
+
+```{r Compare World and US top 5 popular cancer types over time, fig.height= 3, fig.width = 8}
+USA_cancer <- cancer %>% 
   filter(Code == "USA") %>% 
-  filter(Death_count >= 25000) %>% 
+  group_by(Year) %>% 
+  slice_max(Death_count, n=5) %>% #Top 5 cancer types each year in the USA, instead of cancer types with death count > 25000 because the graph looked too busy for me. However, we could change back if necessary - Tam
   ggplot(aes(x = Year, y = Death_count, color = Cancer_type, label = Cancer_type)) +
-  geom_labelline(straight = TRUE, size = 3, ) +
-  labs(x = "",y = "",title = "Number of Cancer Deaths in the US from 1990-2019 by Type of Cancer") +
-  theme(legend.position = "none")
+  geom_textline(aes(label = Cancer_type), size = 3, vjust = -0.5)+
+  labs(x = "", 
+       y = "",
+       title = "Number of Cancer Deaths in the US from 1990-2019 by Type of Cancer",
+       color = "Cancer") +
+  theme(legend.position = "none",
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_blank())
+
+World_cancer <- cancer %>% 
+  group_by(Year, Cancer_type) %>% 
+  summarize(total_count = sum(Death_count)/1000) %>% 
+  slice_max(total_count, n=5) %>%
+  ggplot(aes(x = Year, y = total_count, color = Cancer_type, label = Cancer_type)) +
+  geom_textline(aes(label = Cancer_type), size = 3, vjust = -0.5)+ 
+  labs(x = "",
+       y = "",
+       title = "Number of Cancer Deaths WorldWide from 1990-2019 by Type of Cancer",
+       color = "Cancer") +
+  theme(legend.position = "none",
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_blank())
+
+World_cancer +USA_cancer
+
+#You know how to create a legend consisting of only shared cancer types for world and Usa? 
 ```
-```{r}
+
+Discussion: 
+Trachael, bronchus, and lung cancer causes most death by far for both world and USA.
+For USA, top 5 stayed the same over time,however, for the world, we could see turnovers (is this the right word?!!).
+Most cancer deaths rise less extremely than lung cancer **where did you observe this? - Tam**
+Q1: Rising death counts may correlate with rising world population?
+
+```{r continuing question Q1, make us of the world_pop_new dataset}
+
+```
+
+Discussion:
+
+
+```{r} 
 cancer %>%
   group_by(Cancer_type, Year) %>% 
   mutate(Death_count_sum = sum(Death_count)) %>% 
   ggplot(aes(x = Year, y = Death_count_sum, color = Cancer_type)) +
     geom_line()
+
+#What is this doing? - Tam
 ```
 
-```{r}
 
+```{r creating a choropleth world map to see how rate of increase changed for countries over 2000-2017 }
+???
 ```
+
+
+
+
 
 
