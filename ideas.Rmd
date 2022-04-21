@@ -61,7 +61,7 @@ cancer <- cancer_og %>%
 
 
 
-```{r Compare World and US top 5 popular cancer types over time, fig.height= 3, fig.width = 8}
+```{r Compare World and US top 5 popular cancer types over time}
 USA_cancer <- cancer %>% 
   filter(Code == "USA") %>% 
   group_by(Year) %>% 
@@ -92,14 +92,15 @@ World_cancer <- cancer %>%
 
 World_cancer +USA_cancer
 
-#You know how to create a legend consisting of only shared cancer types for world and Usa? 
+#You know how to create a legend consisting of only shared cancer types for world and Usa? We can also adjust width and height of fig to show the graphs better - Tam
+
 ```
 
 Discussion: 
 Trachael, bronchus, and lung cancer causes most death by far for both world and USA.
-For USA, top 5 stayed the same over time,however, for the world, we could see turnovers (is this the right word?!!).
+For USA, top 5 cancers stayed the same over time, only the ranks changed, however, for the world, we could also see the fifth position change to a different cancer type.
 Most cancer deaths rise less extremely than lung cancer **where did you observe this? - Tam**
-Q1: Rising death counts may correlate with rising world population?
+Q1: Rising death counts may correlate with rising world population (i.e total growth, urban growth)? **I have downloaded the dataset that does just this, check out world_pop_new - Tam**
 
 ```{r continuing question Q1, make us of the world_pop_new dataset}
 
@@ -120,7 +121,7 @@ cancer %>%
 
 
 ```{r creating a choropleth world map to see how rate of increase changed for countries over 2000-2017 }
-???
+
 ```
 
 
