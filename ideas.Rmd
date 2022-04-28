@@ -145,7 +145,7 @@ top_5_cancer_pop
 fig2a <- top_5_cancer_pop %>% 
   filter(year %in% c(2000,2008,2017)) %>% 
   group_by(year) %>% 
-  slice_max(death_per_total, n = 5) %>% 
+  slice_max(death_per_total, n = 10) %>% 
   ungroup() %>% 
   mutate(country = reorder_within(country, death_per_total, as.character(year), fun = sum, sep = "___")) %>% 
   ggplot(aes(y = country, x = death_per_total, fill = country)) +
@@ -175,6 +175,7 @@ Why? -> Maybe do some research for possible explanations? The link below may hel
 
 [Cancer death rates by country](https://www.worldlifeexpectancy.com/cause-of-death/all-cancers/by-country/)
 
+Show those countries on world map, color red, choropleth.
 
 
 ```{r most popular cacner types in those top 5 countries}
@@ -209,7 +210,8 @@ Observation: most consistent types of cancer are Tracheal, bronchus and lung can
 fig2a/fig2b
 ```
 
-
+=> High death rates by cancer highly concentrated around Europe. Here's a link to maybe why? 
+(EU vs USA)[https://www.politico.eu/article/cancer-europe-america-comparison/]
 
 ```{r death per 1000 urban pop}
 fig3a <- top_5_cancer_pop %>% 
