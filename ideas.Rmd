@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+#knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 [link to git collab](https://github.com/thuang111/Ting_Tam_Chris_final_project)
@@ -145,12 +145,12 @@ top_5_cancer_pop
 fig2a <- top_5_cancer_pop %>% 
   filter(year %in% c(2000,2008,2017)) %>% 
   group_by(year) %>% 
-  slice_max(death_per_total, n = 10) %>% 
+  slice_max(death_per_total, n = 5) %>% 
   ungroup() %>% 
   mutate(country = reorder_within(country, death_per_total, as.character(year), fun = sum, sep = "___")) %>% 
   ggplot(aes(y = country, x = death_per_total, fill = country)) +
   geom_col()+
-  scale_fill_viridis_d()+
+  scale_fill_viridis_d()+ #scale_fill to show that death rates actually increased over time. We are seeing more and more light colors than dark ones.
   facet_wrap(~year, scales = "free_y")+
   scale_y_reordered()+
   labs(title = "Top 5 countries with highest deaths per 1000 people in 2000, 2008 and 2017",
@@ -164,6 +164,7 @@ fig2a <- top_5_cancer_pop %>%
 fig2a
 ```
 
+**Should we do top 5 or top 10?**
 2000-2008: no change in countries, but the ranks did change
 2008-2017: new names appeared
 \
@@ -212,6 +213,8 @@ fig2a/fig2b
 
 => High death rates by cancer highly concentrated around Europe. Here's a link to maybe why? 
 (EU vs USA)[https://www.politico.eu/article/cancer-europe-america-comparison/]
+- age? -> Maybe webscape data on Europe's population age? (Cancer more likely as you get older)
+- 
 
 ```{r death per 1000 urban pop}
 fig3a <- top_5_cancer_pop %>% 
@@ -222,6 +225,7 @@ fig3a <- top_5_cancer_pop %>%
   mutate(country = reorder_within(country, death_per_urban, as.character(year), fun = sum, sep = "___")) %>% 
   ggplot(aes(y = country, x = death_per_urban, fill = country)) +
   geom_col()+
+  scale_fill_viridis_d()+
   facet_wrap(~year, scales = "free_y")+
   scale_y_reordered()+
   labs(title = "Top 5 Countries with Highest Deaths per 1000 Urban People in 2000, 2008 and 2017",
@@ -263,10 +267,16 @@ fig3b <- cancer %>%
 fig3b
 ```
 
-Observarion: besides the 3 cancer types mentioned earlier, we are also seeing prostate cancer.  
+Observarion: besides the 3 cancer types mentioned earlier, we are also seeing prostate and pancreatic cancer.  
 
 ```{r}
 fig3a / fig3b
+```
+
+
+
+```{r}
+#comparing cancer death rates vs urban growth rate???
 ```
 
 
