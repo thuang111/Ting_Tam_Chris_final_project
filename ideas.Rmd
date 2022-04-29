@@ -301,33 +301,31 @@ cancer %>%
 
 ```{r }
 
-USA -<world_map %>% 
-             filter(country == "USA") %>%
-             rename(country_code = country)
-  filter(country == "United States") %>% 
-    ggplot() +
-  geom_map(map = ,
-           aes(map_id = country_code,
-               fill = death/total_population,
-               group = year)) +
-  expand_limits(x = world_map$long, y = world_map$lat)+
-  transition_time(date)+ 
-    labs(title = "",
-         subtitle = "Date : {frame_time}",
-       x="",
-       y ="")+
-  theme_map()+
-  theme(legend.background = element_blank(),
-        plot.title = element_text(hjust = 0.5))
-  animate(covid_time_map,
-          nframes = 300,
-          end_pause = 10)
-  
+#USA -<world_map %>% 
+#             filter(country == "USA") %>%
+#             rename(country_code = country)
+#  filter(country == "United States") %>% 
+#    ggplot() +
+#  geom_map(map = ,
+#           aes(map_id = country_code,
+#               fill = death/total_population,
+#               group = year)) +
+#  expand_limits(x = world_map$long, y = world_map$lat)+
+#  transition_time(date)+ 
+#    labs(title = "",
+#         subtitle = "Date : {frame_time}",
+#       x="",
+#       y ="")+
+#  theme_map()+
+#  theme(legend.background = element_blank(),
+#        plot.title = element_text(hjust = 0.5))
+#  animate(covid_time_map,
+#          nframes = 300,
+#          end_pause = 10)
+
+
+
 ```
-
-
-
-
 
 
 ```{r creating a choropleth world map to see how rate of increase changed for countries over 2000-2017}
@@ -336,8 +334,14 @@ USA -<world_map %>%
 
 ```
 
+**important data source**: (age group by countries (total, male and female))[http://data.un.org/Data.aspx?d=POP&f=tableCode%3A22].
 
+Hypothesis: EU is affected most by cancer because of aging population 
+Facet wrap: young vs old population
 
+gender 
+
+=> Continue to explore those factors
 
 
 
