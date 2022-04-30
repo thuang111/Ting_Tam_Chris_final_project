@@ -34,6 +34,7 @@ data("world_bank_pop") #pop data only available from 2000 to 2017. So we might w
 world_map <- map_data("world") %>%  #coordinates of countries
   rename(country = region) %>% 
   select(-subregion)
+
 ```
 
 
@@ -67,7 +68,8 @@ cancer <- cancer_og %>%
 
 
 
-```{r Compare World and US top 5 popular cancer types over time}
+```{r, fig.alt = "This line graph shows the top 5 types of cancer worldwide and the USA that have increased the most since 1990. The cancer with the highest growth rate is trachael, bronchus, and lunger cancer, having almost doubled since 1990. Colon and rectal cancer is similar, having gone up around 90% in the past 30 years worldwide. In comparison, the USA has both of those as their top 2 cancers with the highest growth rate, however they are closer to 30% and 15%, respectively."}
+#compare world and US top 5 popular cancer types over time
 USA_cancer <- cancer %>% 
   filter(Code == "USA") %>% 
   group_by(Year) %>% 
@@ -141,7 +143,8 @@ top_5_cancer_pop <-cancer_pop %>%
 top_5_cancer_pop
 ```
 
-```{r death per 1000 total pop}
+```{r, fig.alt = "This bar chart shows the countries with top 5 cancer mortality rate per 1000 people in 2000, 2008, and 2017. Monaco has the highest mortality rate in all three time periods, being around 40% greater than second place each time. Serbia seems to have an increased mortality rate in recent years, having the second highest mortaility rate in 2008 and 2017.Denmark, Germany, and Hungary are the other countries that are seen multiple times on the bar graph, with both countries being off the chart in 2017."}
+#death per 1000 capita
 fig2a <- top_5_cancer_pop %>% 
   filter(year %in% c(2000,2008,2017)) %>% 
   group_by(year) %>% 
@@ -179,7 +182,7 @@ Why? -> Maybe do some research for possible explanations? The link below may hel
 Show those countries on world map, color red, choropleth.
 
 
-```{r most popular cacner types in those top 5 countries}
+```{r, fig.alt = "This bar graph combines two earlier graphs, those being the most common cancer deaths and the countries with the highest mortality rates per 1000 people. Trachael, bronchus, and lunger cancer deaths are shown to be the most common in these countires, with Monaco having almost two times more of these lung cancer deaths than the leading countries. Colon and rectal cancer mortalities also appear for every country during the years present on the graph, with breast cancer, pancreatic, and testicular being the others present. Japan is the country among the 5 with the highest rate of prostate cancer, and Monaco with pancreatic cancer."}
 fig2b <- cancer %>%
   rename(country_code = Code, year = Year) %>% 
   filter(Entity %in% c("Monaco","Hungary","Denmark", "Serbia", "Gernamy", "Croatia", "Japan"), year %in% c(2000,2008,2017)) %>% 
@@ -202,6 +205,8 @@ fig2b <- cancer %>%
           plot.title = element_text(hjust = 0.5),
           panel.grid.major.y = element_blank(),
           panel.grid.minor.y = element_blank())
+
+fig2b
 ```
   
 
@@ -216,7 +221,8 @@ fig2a/fig2b
 - age? -> Maybe webscape data on Europe's population age? (Cancer more likely as you get older)
 - 
 
-```{r death per 1000 urban pop}
+```{r, fig.alt = "This graph uses the same three years (2000, 2008, and 2017) and ranks the top 5 countries per year by cancer deaths in their urban populations. There are countries that have appeared before, such as Serbia and Monaco, however they are less prominant. Barbados represents the biggest change from shifting from total population to urban population. Barbados is ranked 3rd, 1st, and 2nd per each year. Saint Lucia also skyrockets from not being present in 2000, 4th place in 2007, and 1st in 2017. Burundi also shows up 1st in 2000, however afterwads falls off the graph entirely."}
+#deaths per 1000 urban pop
 fig3a <- top_5_cancer_pop %>% 
   filter(year %in% c(2000,2008,2017)) %>% 
   group_by(year) %>% 
@@ -240,7 +246,7 @@ fig3a
 ```
 
 
-```{r cancer types per urban}
+```{r, fig.alt = "Simiarly to fig2b, this graph shows the most frequent lethal cancers for the countries with the highest deaths per capita in urban areas. While lung cancers continue to be frequent, the three countries not present in fig2b each have a most lethal cancer different from the others. For Barbados, prostate cancer around 40% of the top 3 most lethal cancers, Burundi with cervical cancers, and Saint Lucia with prostate cancer."}
 fig3b <- cancer %>%
   rename(country_code = Code, year = Year) %>% 
   filter(Entity %in% c("Burundi","Serbia","Barbados", "Monaco", "Hungary", "Croatia", "Saint Lucia"), year %in% c(2000,2008,2017)) %>% 
@@ -309,7 +315,7 @@ cancer %>%
 
 ```{r }
 
-USA -<world_map %>% 
+USA <-world_map %>% 
              filter(country == "USA") %>%
              rename(country_code = country)
   filter(country == "United States") %>% 
