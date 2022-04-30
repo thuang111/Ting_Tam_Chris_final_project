@@ -285,11 +285,10 @@ fig3a / fig3b
 #comparing cancer death rates vs urban growth rate???
 cancer %>% 
   filter(Entity %in% c("Uganda", "Burundi", "Oman", "Tanzania", "Burkina Faso")) %>% 
-  group_by(Entity, Year) %>% 
-  summarise(leukemia_deaths) %>% 
-  group_by(country) %>% 
-  arrange(country, Year) %>% 
-  mutate(rate_change_percent = 100 * (leukemia_deaths - lag(leukemia_deaths))/lag(leukemia_deaths, na.rm = TRUE)) %>% 
+  group_by(Year, Entity) %>% 
+  summarise(Death_count)  
+
+
 #countries with the top 5 urban growths
 ```
 
