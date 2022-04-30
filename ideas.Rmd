@@ -156,9 +156,9 @@ fig2a <- top_5_cancer_pop %>%
   scale_fill_viridis_d()+ #scale_fill to show that death rates actually increased over time. We are seeing more and more light colors than dark ones.
   facet_wrap(~year, scales = "free_y")+
   scale_y_reordered()+
-  labs(title = "Top 5 countries with highest deaths per 1000 people in 2000, 2008 and 2017",
+  labs(title = "Top 5 countries with highest percentage of deaths per 1000 people in 2000, 2008 and 2017",
        x = "",
-       y = "Death count per 1000 people")+
+       y = "")+
     theme(legend.position = "none",
           plot.title = element_text(hjust = 0.5),
           panel.grid.major.y = element_blank(),
@@ -234,9 +234,9 @@ fig3a <- top_5_cancer_pop %>%
   scale_fill_viridis_d()+
   facet_wrap(~year, scales = "free_y")+
   scale_y_reordered()+
-  labs(title = "Top 5 Countries with Highest Deaths per 1000 Urban People in 2000, 2008 and 2017",
+  labs(title = "Top 5 Countries with Highest Percentage of Deaths per 1000 Urban People in 2000, 2008 and 2017",
        x = "",
-       y = "Death count per 1000 urban people")+
+       y = "")+
     theme(legend.position = "none",
           plot.title = element_text(hjust = 0.5),
           panel.grid.major.y = element_blank(),
