@@ -194,13 +194,13 @@ fig2b <- cancer %>%
   group_by(Entity, year) %>%
   slice_max(death_per_total, n = 3) %>% 
   ungroup() %>% 
-  ggplot(aes(y = Entity, x = death_per_total, fill = Cancer_type ))+
+  ggplot(aes(y = Entity, x = death_per_total, fill = fct_infreq(Cancer_type)))+
   geom_col(position = "dodge")+
   facet_wrap(~year)+
   labs(title = "Top Cancer Types causing most deaths per 1000 people in 2000, 2008 and 2017",
        x = "",
        y = "",
-       color = "Types of cancer")+
+       fill = "Types of cancer")+
     theme(legend.position = "bottom",
           plot.title = element_text(hjust = 0.5),
           panel.grid.major.y = element_blank(),
