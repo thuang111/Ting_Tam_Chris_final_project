@@ -65,7 +65,7 @@ Actual Cancer Data: We chose this particular data set because it has a list of m
 cancer_og <- read_csv("total-cancer-deaths-by-type.csv")
 ```
 
-We then wanted to change the code a bit so we could use it how we wanted to.
+We then wanted to change the code a bit so we could use it how we wanted to. We reduced the amount of columns by creating the "Type of cancer" variable which each had the value of the specific type of cancer. In the original data, there was a column for each type of cancer death that had an associated number. 
 ```{r cleaning up the variables}
 cancer <- cancer_og %>% 
   pivot_longer(cols = starts_with("Death"),
