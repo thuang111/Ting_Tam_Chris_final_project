@@ -68,7 +68,7 @@ cancer <- cancer_og %>%
 
 
 
-```{r, fig.alt = "This line graph shows the top 5 types of cancer worldwide and the USA that have increased the most since 1990. The cancer with the highest growth rate is trachael, bronchus, and lunger cancer, having almost doubled since 1990. Colon and rectal cancer is similar, having gone up around 90% in the past 30 years worldwide. In comparison, the USA has both of those as their top 2 cancers with the highest growth rate, however they are closer to 30% and 15%, respectively."}
+```{r, fig.alt = "This line graph shows the top 5 types of cancer worldwide and the USA that have increased the most since 1990. The cancer with the highest growth rate is trachael, bronchus, and lunger cancer, having almost doubled since 1990. Colon and rectal cancer is similar, having gone up around 90% in the past 30 years worldwide. In comparison, the USA has both of those as their top 2 cancers with the highest growth rate, however they are closer to 30% and 15%, respectively.", fig.width=10}
 #compare world and US top 5 popular cancer types over time
 USA_cancer <- cancer %>% 
   filter(Code == "USA") %>% 
@@ -107,7 +107,7 @@ World_cancer + USA_cancer
 
 Discussion: 
 Compare
-Trachael, bronchus, and lung cancer causes most death by far for both world and USA. Furthermore, both world and the USA have colon and rectum cancer, pancreatic cancer and breast cancer in their top 5.
+Trachael, bronchus, and lung cancer causes the most deaths by far for both the world and the USA. Furthermore, both the world and the USA have colon and rectum cancer, pancreatic cancer and breast cancer in their top 5.
 Contrast
 For USA, top 5 cancers stayed the same over time, only the ranks changed, however, for the world, we could also see the fifth position change to a different cancer type every 10 years or so. Moreover, while stomach cancer is a huge problem for the world, this isn't the case for the US.
 
@@ -296,15 +296,6 @@ cancer %>%
 
 
 Discussion:
-```{r} 
-cancer %>%
-  group_by(Cancer_type, Year) %>% 
-  mutate(Death_count_sum = sum(Death_count)) %>% 
-  ggplot(aes(x = Year, y = Death_count_sum, color = Cancer_type)) +
-    geom_line()
-
-#What is this doing? - Tam
-```
 
 ```{r}
 
