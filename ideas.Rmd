@@ -72,13 +72,14 @@ cancer <- cancer_og %>%
 #compare world and US top 5 popular cancer types over time
 USA_cancer <- cancer %>% 
   filter(Code == "USA") %>% 
-  group_by(Year) %>% 
-  slice_max(Death_count, n=5) %>% #Top 5 cancer types each year in the USA, instead of cancer types with death count > 25000 because the graph looked too busy for me. However, we could change back if necessary - Tam
-  ggplot(aes(x = Year, y = Death_count, color = Cancer_type, label = Cancer_type)) +
+  group_by(Year, Cancer_type) %>% 
+  summarize(total_count_us = sum(Death_count)/1000) %>% 
+  slice_max(total_count_us, n=5) %>%
+  ggplot(aes(x = Year, y = total_count_us, color = Cancer_type, label = Cancer_type)) +
   geom_textline(aes(label = Cancer_type), size = 3, vjust = -0.5)+
   labs(x = "", 
        y = "",
-       title = "Number of Cancer Deaths in the US from 1990-2019 by Type of Cancer",
+       title = "Number of Cancer Deaths in the US, in thousands, from 1990-2019 by Type of Cancer",
        color = "Cancer") +
   theme(legend.position = "none",
         panel.grid.minor.x = element_blank(),
@@ -92,13 +93,13 @@ World_cancer <- cancer %>%
   geom_textline(aes(label = Cancer_type), size = 3, vjust = -0.5)+ 
   labs(x = "",
        y = "",
-       title = "Number of Cancer Deaths, in thousand, WorldWide from 1990-2019 by Type of Cancer",
+       title = "Number of Cancer Deaths, in thousands, Worldwide from 1990-2019 by Type of Cancer",
        color = "Cancer") +
   theme(legend.position = "none",
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_blank())
 
-World_cancer +USA_cancer
+World_cancer + USA_cancer
 
 #You know how to create a legend consisting of only shared cancer types for world and Usa? We can also adjust width and height of fig to show the graphs better - Tam
 
