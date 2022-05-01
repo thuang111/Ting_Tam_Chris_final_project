@@ -29,17 +29,20 @@ library(tidytext)
 theme_set(theme_minimal()) # My favorite ggplot() theme :)
 ```
 
+## Introduction
+
 Introduction and Background: 
   Cancer is one of the leading causes of death in the world with millions of people dying every year to the disease. Cancer forms when cells in the body begin to grow and multiply uncontrollably generally due to changes in genes or damage to DNA. This can make the disease extremely difficult to treat with most treatments being invasive or physically taxing with no guarantee of success. People of any age, sex, and race can get cancer though it typically occurs in older people. We also wanted to analyze other factors that can contribute to higher rates of cancer mortality. One aspect that came to mind was urban versus rural populations, as we have seen reports and data that say people in urban areas are more likely to die of cancer than those in rural areas. 
   We are interested in seeing patterns in cancer deaths around the world in order to find out which cancers are the most lethal and where the most people are dying from cancer. We believe this gave us insight into why cancer deaths appear to be rising and some potential reasons for the deaths and the changes of death counts over time. Along with this, cancer is something that everyone is impacted by at some point in their life. Whether it be a grandparent, parent, or close friend, in many ways cancer is inescapable in the modern world. We may be able to look through this data and find new connections that we have not considered before. 
-  
+
+## Research Questions
+ 
 Research Questions
 Q1: Which countries have the highest death rates by cancer per 1,000 people (total) throughout 2000 to 2017?
 Q2: Do urban areas have higher rates of cancer, and if so what cancers are more common in these urban areas?
 Q3: Is the age of a country’s population also a predictor of cancer deaths?
 
-
-Data Sources:
+## Data Sources
 
 World Pop: This data set contains population statistics including total population and total growth rate as well as urban population and urban growth rate. This came included with RStudio
 ```{r loading world bank pop and world map}
@@ -107,7 +110,7 @@ cancer_pop
 top_5_cancer_pop
 ```
 
-Analysis-
+## Analysis
 
 ```{r, fig.alt = "This line graph shows the top 5 types of cancer worldwide and the USA that have increased the most since 1990. The cancer with the highest growth rate is trachael, bronchus, and lunger cancer, having almost doubled since 1990. Colon and rectal cancer is similar, having gone up around 90% in the past 30 years worldwide. In comparison, the USA has both of those as their top 2 cancers with the highest growth rate, however they are closer to 30% and 15%, respectively.", fig.width=10}
 #compare world and US top 5 popular cancer types over time
@@ -360,6 +363,7 @@ USA <-world_map %>%
 
 ```
 
+## Conclusion
 
 Key takeaways:
   One of the most notable takeaways are the types of cancer that are responsible for the most deaths. For example, in our data we saw that most cancer moralities around the world were due to tracheal, bronchus, and lung cancers. There are a variety of reasons why, for example smoking as well as emissions from fossil fuels. This leads into our other point of urban populations being more at risk, as people living in these urban areas are more likely to be around these emissions due to higher amounts of vehicles and other machinery. Considering that lung cancers are the most common types of cancer mortality, this hypothesis seems to be true, unless some aspect such as smoking is causing this increase. 
