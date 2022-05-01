@@ -37,7 +37,16 @@ world_map <- map_data("world") %>%  #coordinates of countries
 
 ```
 
+```{r I need this for one question}
+#I need this for one question
+CancerDataWeird <- readr::read_csv('https://raw.githubusercontent.com/ChrisMcCon/Cancer_data/main/total-cancer-deaths-by-type.csv')
 
+CancerDataWTotalCancer <- CancerDataWeird %>% 
+  group_by(country, Year) %>% 
+  summarise(total_cancer = sum(liver_cancer_deaths + kidney_cancer_deaths + lip_and_oral_cavity_cancer_deaths + tracheal_bronchus_and_lung_cancer_deaths + larynx_cancer_deaths + gallbladder_and_biliary_tract_cancer_deaths + malignant_skin_melanoma_deaths + leukemia_deaths + hodgkin_lymphoma_deaths + multiple_myeloma_deaths + other_neoplasms_deaths + breast_cancer_deaths + prostate_cancer_deaths + thyroid_cancer_deaths + stomach_cancer_deaths + bladder_cancer_deaths + uterine_cancer_deaths + ovarian_cancer_deaths + cervical_cancer_deaths + `brain_and_central_nervous_system-cancer_deaths` + pancreatic_cancer_deaths + esophageal_cancer_deaths + testicular_cancer_deaths + nasopharynx_cancer_deaths + other_pharynx_cancer_deaths + colon_and_rectum_cancer_deaths + `non-melanoma_skin_cancer_deaths` + mesothelioma_deaths + `non-hodgkin_lymphoma_deaths`)) 
+
+CancerDataWTotalCancer
+```
 
 
 ```{r reordering world bank pop dataset}
@@ -285,12 +294,37 @@ fig3a / fig3b
 
 ```{r}
 #comparing cancer death rates vs urban growth rate???
-cancer %>% 
-  filter(Entity %in% c("Uganda", "Burundi", "Oman", "Tanzania", "Burkina Faso")) %>% 
-  group_by(Year, Entity) %>% 
-  summarise(Death_count)
+RatesTop5 <- CancerDataWTotalCancer %>% 
+  filter(country %in% c("Uganda", "Burundi", "Oman", "Tanzania", "Burkina Faso")) %>% 
+  filter(Year > 2014) %>% 
+  group_by(country) %>% 
+  arrange(country, Year) %>% 
+  mutate(rate_change_percent = 100 * (total_cancer - lag(total_cancer))/lag(total_cancer), na.rm = TRUE) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = Year,
+             y = rate_change_percent,
+             color = country)) +
+  geom_line() +
+  labs(title = "Growth Rate of Cancer in the Top 5 Urbanizing Countries",
+       y = "% Change of Cancer Deaths")
 
+RatesBottom5 <- CancerDataWTotalCancer %>% 
+  filter(country %in% c("Latvia", "Samoa", "Ukraine", "Andorra", "Lithuania")) %>% 
+   filter(Year > 2014) %>% 
+  group_by(country) %>% 
+  arrange(country, Year) %>% 
+  mutate(rate_change_percent = 100 * (total_cancer - lag(total_cancer))/lag(total_cancer)) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = Year,
+             y = rate_change_percent,
+             color = country)) +
+  geom_line() +
+  labs(title = "Growth Rate of Cancer in the Bottom 5 Urbanizing Countries",
+       y = "% Change of Cancer Deaths")
 
+RatesBottom5
+
+RatesTop5/RatesBottom5
 #countries with the top 5 urban growths
 ```
 
