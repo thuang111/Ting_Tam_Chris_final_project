@@ -292,7 +292,7 @@ fig3a / fig3b
 
 
 
-```{r}
+```{r, fig.alt = "This group of grpahs compares 10 countries, five with the highest % increase of urbanization and the five with the lowest rates. Overall, the urbanizing countries have a higher increase in cancer deaths per year, with Burundi being consistantly on top, and Oman having consistantly the lowest rate of change, in some cases being negative.Among the bottom five urbanizing countries, Adorra consistantly has the highest increase of around 2.5% and Lithuania at the lowest with -0.5%."}
 #comparing cancer death rates vs urban growth rate???
 RatesTop5 <- CancerDataWTotalCancer %>% 
   filter(country %in% c("Uganda", "Burundi", "Oman", "Tanzania", "Burkina Faso")) %>% 
