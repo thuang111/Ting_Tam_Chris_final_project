@@ -288,7 +288,7 @@ fig3a / fig3b
 cancer %>% 
   filter(Entity %in% c("Uganda", "Burundi", "Oman", "Tanzania", "Burkina Faso")) %>% 
   group_by(Year, Entity) %>% 
-  summarise(Death_count)  
+  summarise(Death_count)
 
 
 #countries with the top 5 urban growths
