@@ -26,6 +26,8 @@ library(maps)          # for map data
 library(ggmap)         # for mapping points on maps
 library(patchwork)
 library(tidytext)
+library(rvest)
+library(robotstxt)
 theme_set(theme_minimal()) # My favorite ggplot() theme :)
 ```
 
@@ -145,7 +147,7 @@ top_5_cancer_pop
 fig2a <- top_5_cancer_pop %>% 
   filter(year %in% c(2000,2008,2017)) %>% 
   group_by(year) %>% 
-  slice_max(death_per_total, n = 5) %>% 
+  slice_max(death_per_total, n = 20) %>% 
   ungroup() %>% 
   mutate(country = reorder_within(country, death_per_total, as.character(year), fun = sum, sep = "___")) %>% 
   ggplot(aes(y = country, x = death_per_total, fill = country)) +
@@ -182,7 +184,7 @@ Show those countries on world map, color red, choropleth.
 ```{r most popular cacner types in those top 5 countries}
 fig2b <- cancer %>%
   rename(country_code = Code, year = Year) %>% 
-  filter(Entity %in% c("Monaco","Hungary","Denmark", "Serbia", "Gernamy", "Croatia", "Japan"), year %in% c(2000,2008,2017)) %>% 
+  filter(Entity %in% c("Monaco","Hungary","Denmark", "Serbia", "Germany", "Croatia", "Japan"), year %in% c(2000,2008,2017)) %>% 
   left_join(world_pop_new %>% 
               filter(year %in% c(2000,2008,2017)) %>% 
               mutate(year = as.numeric(year)),
@@ -220,7 +222,7 @@ fig2a/fig2b
 fig3a <- top_5_cancer_pop %>% 
   filter(year %in% c(2000,2008,2017)) %>% 
   group_by(year) %>% 
-  slice_max(death_per_urban, n = 5) %>% 
+  slice_max(death_per_urban, n = 20) %>% 
   ungroup() %>% 
   mutate(country = reorder_within(country, death_per_urban, as.character(year), fun = sum, sep = "___")) %>% 
   ggplot(aes(y = country, x = death_per_urban, fill = country)) +
@@ -267,7 +269,7 @@ fig3b <- cancer %>%
 fig3b
 ```
 
-Observarion: besides the 3 cancer types mentioned earlier, we are also seeing prostate and pancreatic cancer.  
+Observarion: besides the 3 cancer types mentioned earlier, we are also seeing prostate and pancreatic cancer.  Urban growth affects different countries in terms of cancaer deaths.
 
 ```{r}
 fig3a / fig3b
@@ -297,7 +299,7 @@ cancer %>%
 
 \
 \
-**other potentially good stuff**
+**other potentially good stuff** - Creating 
 
 ```{r }
 
@@ -327,12 +329,136 @@ cancer %>%
 
 ```
 
+```{r}
+cancer_pop %>% 
+  group_by(country) %>% 
+  mutate(death1 = replace_na(lag(death, n =1), 0), death_rate = (death - death1)/death1 * 100) %>% 
+  filter(country == "Croatia") %>% 
+  ggplot()+
+  geom_line(aes(y = death_rate, x = year), color = "green")+
+  geom_line(aes(y = urban_population_growth, x = year), color = "red")
+
+cancer_pop %>% 
+  group_by(country) %>% 
+  mutate(death1 = replace_na(lag(death, n =1), 0), death_rate = (death - death1)/death1 * 100) %>% 
+  filter(country == "Hungary") %>% 
+  ggplot()+
+  geom_line(aes(y = death_rate, x = year), color = "green")+
+  geom_line(aes(y = urban_population_growth, x = year), color = "red")
+
+cancer_pop %>% 
+  group_by(country) %>% 
+  mutate(death1 = replace_na(lag(death, n =1), 0), death_rate = (death - death1)/death1 * 100) %>% 
+  filter(country == "United States") %>% 
+  ggplot()+
+  geom_line(aes(y = death_rate, x = year), color = "green")+
+  geom_line(aes(y = urban_population_growth, x = year), color = "red")
+
+cancer_pop %>% 
+  group_by(country) %>% 
+  mutate(death1 = replace_na(lag(death, n =1), 0), death_rate = (death - death1)/death1 * 100) %>% 
+  filter(country == "Monaco") %>% 
+  ggplot()+
+  geom_line(aes(y = death_rate, x = year), color = "green")+
+  geom_line(aes(y = urban_population_growth, x = year), color = "red")
+
+
+cancer_pop %>% 
+  group_by(country) %>% 
+  mutate(death1 = replace_na(lag(death, n =1), 0), death_rate = (death - death1)/death1 * 100) %>% 
+  filter(country == "Germany") %>% 
+  ggplot()+
+  geom_line(aes(y = death_rate, x = year), color = "green")+
+  geom_line(aes(y = urban_population_growth, x = year), color = "red")
+
+cancer_pop %>% 
+  group_by(country) %>% 
+  mutate(death1 = replace_na(lag(death, n =1), 0), death_rate = (death - death1)/death1 * 100) %>% 
+  filter(country == "Barbados") %>% 
+  ggplot()+
+  geom_line(aes(y = death_rate, x = year), color = "green")+
+  geom_line(aes(y = urban_population_growth, x = year), color = "red")
+
+
+  
+```
+```{r}
+cancer_pop %>% 
+  group_by(country) %>% 
+  mutate(death1 = replace_na(lag(death, n =1), 0), death_rate = (death - death1)/death1 * 100) %>% 
+  filter(country == "Croatia") %>% 
+  ggplot()+
+  geom_line(aes(y = death_rate, x = year), color = "green")+
+  geom_line(aes(y = urban_population_growth, x = year), color = "red")
+  
+```
+
+```{r}
+  urban_cancer_growth <- cancer %>% 
+  rename(country_code = Code, year = Year, country = Entity, death = Death_count) %>% 
+  mutate(cancer_type = str_squish(Cancer_type)) %>% 
+  filter(cancer_type == "Tracheal, bronchus, and lung cancer") %>% 
+  filter(!year %in% c(1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2018,2019)) %>% 
+  ungroup() %>% 
+  left_join(world_pop_new %>% 
+              mutate(year = as.numeric(year)),
+            by = c("country_code","year")) %>% 
+  na.omit() %>% 
+  group_by(country) %>% 
+  mutate(death1 = replace_na(lag(death, n =1), 0), death_rate = (death - death1)/death1 * 100) %>% 
+  filter(!death_rate == "Inf")
+
+urban_cancer_growth %>% 
+  filter(urban_population_growth > 15)
+```
+```{r}
+urban_cancer_growth %>% 
+  ggplot(aes(x = urban_population_growth, y = death_rate))+
+  geom_point()+
+  geom_smooth()
+```
+
+
+```{r}
+model_1 <- lm(death_rate ~ urban_population_growth, data = urban_cancer_growth)
+
+```
+
+```{r}
+coef(summary(model_1))
+```
+
+
+```{r}
+
+%>% 
+  filter(country == "United States") %>% 
+  ggplot()+
+  geom_line(aes(y = death_rate, x = year), color = "red")+
+  geom_line(aes(y = urban_population_growth, x = year), color = "green")
+```
+
+
 
 ```{r creating a choropleth world map to see how rate of increase changed for countries over 2000-2017}
   
 
 
 ```
+
+
+```{r}
+paths_allowed(paths = "https://www.prb.org/resources/countries-with-the-oldest-populations-in-the-world/")
+```
+
+```{r populationa age by country }
+pop_age <- read_delim("https://raw.githubusercontent.com/thuang111/Ting_Tam_Chris_final_project/main/The%20Top%2050%20Countries%20With%20the%20Largest%20Percentage%20of%20Older%20Adults.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE, 
+    skip = 1)
+```
+
+
+
 
 **important data source**: (age group by countries (total, male and female))[http://data.un.org/Data.aspx?d=POP&f=tableCode%3A22].
 
@@ -343,5 +469,8 @@ gender
 
 => Continue to explore those factors
 
+age data (web scaping)
 
+
+Limitations and 
 
