@@ -42,7 +42,9 @@ theme_set(theme_minimal()) # My favorite ggplot() theme :)
 
 # Introduction
 \
-  Cancer is one of the leading causes of death in the world with millions of people dying every year to the disease. Cancer forms when cells in the body begin to grow and multiply uncontrollably generally due to changes in genes or damage to DNA. This can make the disease extremely difficult to treat with most treatments being invasive or physically taxing with no guarantee of success. People of any age, sex, and race can get cancer though it typically occurs in older people. We also wanted to analyze other factors that can contribute to higher rates of cancer mortality. One aspect that came to mind was urban versus rural populations, as we have seen reports and data that say people in urban areas are more likely to die of cancer than those in rural areas. 
+  Cancer is one of the leading causes of death 
+in the world with millions of people dying every year to the disease. Cancer forms when cells in the body begin to grow and multiply uncontrollably generally due to changes in genes or damage to DNA. This can make the disease extremely difficult to treat with most treatments being invasive or physically taxing with no guarantee of success. People of any age, sex, and race can get cancer though it typically occurs in older people. We also wanted to analyze other factors that can contribute to higher rates of cancer mortality. One aspect that came to mind was urban versus rural populations, as we have seen reports and data that say people in urban areas are more likely to die of cancer than those in rural areas. 
+\
 \
   We are interested in seeing patterns in cancer deaths around the world in order to find out which cancers are the most lethal and where the most people are dying from cancer. We believe this gave us insight into why cancer deaths appear to be rising and some potential reasons for the deaths and the changes of death counts over time. Along with this, cancer is something that everyone is impacted by at some point in their life. Whether it be a grandparent, parent, or close friend, in many ways cancer is inescapable in the modern world. We may be able to look through this data and find new connections that we have not considered before. 
 
@@ -67,8 +69,8 @@ cancer <- cancer_og %>%
   mutate(Cancer_type = str_sub(Type_of_cancer, 10, -37)) %>% 
   select(-Type_of_cancer)
 ```
-\
 Working with this dataset only is insufficient for us to pursue aforementioned research questions. Therefore, we decided to load more data sets, which are listed below: 
+\
 \
 **world_pop_new**: This data set contains population statistics including total population and total growth rate as well as urban population and urban growth rate. We also did some data manipulation to get the total death count by country, regardless of cancer type. This came included with RStudio
 ```{r loading world bank pop and world map, echo =FALSE}
@@ -83,12 +85,10 @@ world_pop_new <- world_bank_pop %>%
   rename(country_code = country, population_growth = SP.POP.GROW ,  total_population = SP.POP.TOTL, urban_population_growth = SP.URB.GROW , total_urban_population = SP.URB.TOTL)
 
 ```
-\
 **world**: The data, containing shapefiles of 241 countries and regions in the world, will be used later to show cancer death rates world wide
 
 ```{r, echo = FALSE}
 world <- ne_countries(scale = "medium", returnclass = "sf")
-class(world)
 ```
 
 **pop_age**: data containing the percentage of people over 65 over total population of 50 countries
@@ -108,7 +108,6 @@ CancerDataWTotalCancer <- CancerDataWeird %>%
   group_by(country, Year) %>% 
   summarise(total_cancer = sum(liver_cancer_deaths + kidney_cancer_deaths + lip_and_oral_cavity_cancer_deaths + tracheal_bronchus_and_lung_cancer_deaths + larynx_cancer_deaths + gallbladder_and_biliary_tract_cancer_deaths + malignant_skin_melanoma_deaths + leukemia_deaths + hodgkin_lymphoma_deaths + multiple_myeloma_deaths + other_neoplasms_deaths + breast_cancer_deaths + prostate_cancer_deaths + thyroid_cancer_deaths + stomach_cancer_deaths + bladder_cancer_deaths + uterine_cancer_deaths + ovarian_cancer_deaths + cervical_cancer_deaths + `brain_and_central_nervous_system-cancer_deaths` + pancreatic_cancer_deaths + esophageal_cancer_deaths + testicular_cancer_deaths + nasopharynx_cancer_deaths + other_pharynx_cancer_deaths + colon_and_rectum_cancer_deaths + `non-melanoma_skin_cancer_deaths` + mesothelioma_deaths + `non-hodgkin_lymphoma_deaths`)) 
 ```
-\
 **cancer_pop**: In order to facilitate further analysis, we combined both our cancer data and population data to get cancer deaths per capita, which helps us immensely in seeing countries with higher rates of cancer than others. Before this, any time we wanted to check which countries had the highest cancer deaths it would only show up countries with large populations such as China or the USA. 
 ```{r, echo = FALSE}
 #Join the cancer and the population datasets
@@ -164,6 +163,7 @@ World_cancer + USA_cancer
 \
 This graph is what first brought to our attention the fact that trachael, bronchus, and lung cancers were the most common cancers to die from in the world. They were solidly the most common cancers by a large margin, with the next most common (colon and rectum cancer) only having around half of the deaths of lung cancer. Another notable part of this graph is that there are multiple types of cancer that had radical increases. Lung cancers, colon and rectum cancers, and breast cancers have almost doubled in mortalities from 1990 to 2019. This shows the importance of noting the types of cancers that are becoming more common, as they oftentimes have different treatments available compared to other forms of cancer. While it is easy to say that rates of cancer mortality are rising, it is important to see which kinds of cancer they are in order to identify the roots and whether this rise is correlated with increases in population or represents an actual increase in lethality.
 \
+\
 We were curious to see which countries in the world have high cancer deaths per 1,000 people and to observe if those countries changed throughout the years so we specifically picked and plotted this information in 3 distinct years - 2000, 2008 and 2017, which correspond to the beginning, middle and the end of our time frame respectively.
 \
 
@@ -192,6 +192,7 @@ fig2a
 ```
 \
 This graph begins to break down the data by countries. The first observation we made is that most of the those countries are actually centered around Europe, with the exception of Japan, which came as quite a surprise for us considering how good healthcare and living standards are in the region. Additionally, over the years, the colors have become lighter and lighter, indicating increasing cancer deaths per 1,000 people.
+\
 \
 More specifically, in this graph we can see that Monaco has the highest rates of cancer per capita by a large margin in each year. There are multiple reasons we found for this. First off, Monaco is one of the richest countries in the world, having the second highest GDP per capita. This means that people in Monaco likely have the resources and tools to live longer lives compared to other countries with fewer resources. As cancer is one of the leading causes of death in old age, it stands to reason that much of Monaco’s population gets to the age where cancer becomes one of the leading causes of death. There are similar stories for other countries on the graph, such as Serbia. Serbia has some of the highest rates of smoking in the world as well as drinking, both leading causes of cancer.
 \
@@ -231,6 +232,7 @@ cancer2017@data[["death_per_total"]] <- cut(cancer2017@data[["death_per_total"]]
 ```
 \
 From the map above, we can see that in 2017 most of the Western countries experienced the highest cancer death rates. Although not clearly shown here, we have learned from before that out of the Western world, the Europe is the most heavily affected. We also observe that many countries in Africa and the Middle East have the lowest cancer death rates.
+\
 \
 Furthermore, we dive deeper into the issue by plotting to see which specific types of cancer caused the most deaths in the top 6 countries.
 ```{r, echo = FALSE, fig.alt = "This bar graph combines two earlier graphs, those being the most common cancer deaths and the countries with the highest mortality rates per 1000 people. Trachael, bronchus, and lunger cancer deaths are shown to be the most common in these countires, with Monaco having almost two times more of these lung cancer deaths than the leading countries. Colon and rectal cancer mortalities also appear for every country during the years present on the graph, with breast cancer, pancreatic, and testicular being the others present. Japan is the country among the 5 with the highest rate of prostate cancer, and Monaco with pancreatic cancer.", fig.width=10}
@@ -287,7 +289,7 @@ fig3a <- cancer_pop %>%
 fig3a
 ```
 \ 
-  This graph shows the value in breaking down the types of cancer as well as the countries. When compared to the initial graph of countries with the highest rates of cancer deaths per 1000 people, there are many of the same countries bar three. Burundi only appears once at #1, implying that there was a local epidemic that was solved by 2008. For Barbados and Saint Lucia, we can see in our next graph that these two countries weren't as affected by tracheal, bronchial, and lung cancers; rather they each had a specific type of cancer that seemed to be a local problem for the country. We were unable to learn much about what we wanted to with this graph, but it serves as a starting point for a more broad exploration into the analysis of more local groups of countries and unique problems they may face when it comes to cancer deaths. (Can someone explain the colors for fig3a in the graph above in this paragraph. I don't fully understand it.)
+This graph shows the value in breaking down the types of cancer as well as the countries. When compared to the initial graph of countries with the highest rates of cancer deaths per 1,000 people, there are many of the same countries bar three. Burundi only appears once at #1, implying that there was a local epidemic that was solved by 2008. For Barbados and Saint Lucia, we can see in our next graph that these two countries weren't as affected by tracheal, bronchial, and lung cancers; rather they each had a specific type of cancer that seemed to be a local problem for the country. We were unable to learn much about what we wanted to with this graph, but it serves as a starting point for a more broad exploration into the analysis of more local groups of countries and unique problems they may face when it comes to cancer deaths.
 
 
 ```{r, fig.alt = "Simiarly to fig2b, this graph shows the most frequent lethal cancers for the countries with the highest deaths per capita in urban areas. While lung cancers continue to be frequent, the three countries not present in fig2b each have a most lethal cancer different from the others. For Barbados, prostate cancer around 40% of the top 3 most lethal cancers, Burundi with cervical cancers, and Saint Lucia with prostate cancer.", fig.width=10}
@@ -316,7 +318,7 @@ fig3b <- cancer %>%
 fig3b
 ```
 \
-  Perhaps the most fascinating part of this graph is that even though we found out we didn’t really answer the question we wanted to, we were provided a window into the ways in which cancer can be different around the world. We were able to see epidemics of certain cancers that were present in countries. As most of our data has shown that lung cancers are the leading cause of cancer-related deaths, seeing multiple countries have higher rates of other cancers sheds light into how different countries across the globe should have different responses to cancer. Saint Lucia, a small island nation in the Caribbean, is dealing with astonishing rates of prostate cancer. Barbados, a similar island nation, is struggling with high rates of pancreatic cancer. This suggests a possible regional problem in the Caribbean with rising rates of these types of cancers. Pancreatic cancer, in particular, is one of the most lethal forms of cancer and a rise in it could spell disaster as it is a form of cancer much more lethal in younger populations. Notably, both of these countries are in the same region and have similar populations and tourist economies. While they both suffer from different forms of cancer, their other similarities point to a regional problem as the reason for their increased rates of cancer deaths from cancers less common throughout the world. 
+Perhaps the most fascinating part of this graph is that we were provided a window into the ways in which cancer can be different around the world. We were able to see epidemics of certain cancers that were present in countries. As most of our data has shown that lung cancers are the leading cause of cancer-related deaths, seeing multiple countries have higher rates of other cancers sheds light into how different countries across the globe should have different responses to cancer. Saint Lucia, a small island nation in the Caribbean, is dealing with astonishing rates of prostate cancer. Barbados, a similar island nation, is struggling with high rates of pancreatic cancer. This suggests a possible regional problem in the Caribbean with rising rates of these types of cancers. Pancreatic cancer, in particular, is one of the most lethal forms of cancer and a rise in it could spell disaster as it is a form of cancer much more lethal in younger populations. Notably, both of these countries are in the same region and have similar populations and tourist economies. While they both suffer from different forms of cancer, their other similarities point to a regional problem as the reason for their increased rates of cancer deaths from cancers less common throughout the world. 
 
 \
 
@@ -364,6 +366,7 @@ RatesTop5 /RatesBottom5
 ```
 \
   This graph uses the countries with the top five highest increases in urbanization along with the bottom five countries. It shows the rates of change in cancer deaths from year to year in each of them starting in 2016. Through this, we can see clear evidence that the countries with higher rates of urbanization are also seeing higher rates of cancer deaths. The difference between them is more than double, with many of the urbanizing countries having rates of increase of around 4% with the bottom five countries only having a growth rate of less than 2%. Each graph does have a notable outlier that spikes to much lower than the others, being Oman for the top five and Lithuania for the bottom five. This again highlights the importance of focusing on countries as well as the world when talking about these sorts of trends, as in this case around 20% of the countries seem to have distinct differences. 
+\
 \
 However, the sample above is pretty small, just 10 countries out of 241. Therefore we want to plot the trend when averaging the values to the world level.
 ```{r, echo = FALSE}
@@ -424,6 +427,7 @@ urban_cancer_growth %>%
 \
 Indeed, even though there is not enough evidence to prove that total cancer death rate positively correlates with urban population growth, visually, lung cancer does have a positive relationship with urban growth rate. Intuitively, this makes sense because as the air quality in urban areas gets worse by the year, the risk of damaging cells in the lungs becomes greater for urban residents.
 \
+\
 What we can learn from this is that it might be misleading to generalize that there is an association between urban growth and rising average cancer death. Nonetheless, if we narrow down to a specific type of cancer, there actually could exist such a correlation.  
 
 \
@@ -457,7 +461,7 @@ world_age_map@data[["% 65+ (of total population)"]] <- cut(world_age_map@data[["
  age_map <- mapCountryData(world_age_map,
                 nameColumnToPlot= '% 65+ (of total population)',
                 catMethod='categorical',
-                mapTitle= 'Countries and The Percentage of People Over 65',
+                mapTitle= 'Countries and The Percentage of People Over 65 in 2017',
                 colourPalette='palette',
                 oceanCol='lightblue',
                 addLegend = T,
@@ -500,16 +504,21 @@ According to this Politico article: [Why you're more likely to die of cancer in 
 \
 This also implies that examining the age of the country's population proves to be a better measure than using urban growth as it can predict with more accuracy on the world level, i.e when we average out the numbers) whereas urban growth is more picky in terms of what *specific type of cancer* it is used to predict.
 
-# Limitations
-
-| We did run into some limitations throughout the project. One of the largest problems we ran into was trying to manipulate the data to what we wanted. This was most apparent when we were investigating the most lethal cancer types by country, where we ended up graphing countries that either had epidemics of cancer or the countries from the list we found of countries with the highest cancer deaths per 1000 people. However, as stated earlier, we were able to learn more about certain types of cancer being more common in specific countries. While those results were unintended, we were able to learn the valuable fact that there is no blanket case for cancer throughout the world, and many countries are affected in different ways. 
+# Reflection/Limitation
+We did run into some limitations throughout the project. One of the largest problems we ran into was trying to manipulate the data to what we wanted. This was most apparent when we were investigating the most lethal cancer types by country, where we ended up graphing countries that either had epidemics of cancer or the countries from the list we found of countries with the highest cancer deaths per 1000 people. 
+However, as stated earlier, we were able to learn more about certain types of cancer being more common in specific countries. While those results were unintended, we were able to learn the valuable fact that there is no blanket case for cancer throughout the world, and many countries are affected in different ways. 
+\
+\
+In addition, even though at first we could not find any evidence for the correlation between cancer deaths and urbanization, we followed our instinct and tried scaling our data down to cancer deaths by cancer type. And it paid dividends when we observed a both visually significant association between urban sprawl and deaths caused by lung cancer. We believe if we keep on trying with other cancer types, we will make more fascinating discoveries.
 
 # Conclusion
+One of the most notable takeaways are the types of cancer that are responsible for the most deaths. For example, in our data we saw that most cancer moralities around the world were due to tracheal, bronchus, and lung cancers. There are a variety of reasons why, for example smoking as well as emissions from fossil fuels. This leads into our other point of urban populations being more at risk to certain types of cancer, as people living in these urban areas are more likely to be around these emissions due to higher amounts of vehicles and other machinery. Considering that lung cancers are the most common types of cancer mortality, this hypothesis seems to be true, unless some aspect such as smoking is causing this increase. 
 \
-| One of the most notable takeaways are the types of cancer that are responsible for the most deaths. For example, in our data we saw that most cancer moralities around the world were due to tracheal, bronchus, and lung cancers. There are a variety of reasons why, for example smoking as well as emissions from fossil fuels. This leads into our other point of urban populations being more at risk, as people living in these urban areas are more likely to be around these emissions due to higher amounts of vehicles and other machinery. Considering that lung cancers are the most common types of cancer mortality, this hypothesis seems to be true, unless some aspect such as smoking is causing this increase. 
 \
-| There are various ways in which questions that we’d like to answer can be altered by specific events happening in countries. For example, Saint Lucia was shown to have some of the highest urban cancer moralities per 1000 people, however looking into the types of cancer it seems to show that there is a prostate cancer epidemic in Saint Lucia that happens to line up with its urban population. The same can be seen in Barbados with their high rates of pancreatic cancer. While we weren’t able to find specific data on these epidemics, it stands to reason that they are more apparent in urban populations likely due to a higher presence of carcinogens such as smog and industrial runoff that would be more common in these urban areas.
+There are various ways in which questions that we’d like to answer can be altered by specific events happening in countries. For example, Saint Lucia was shown to have some of the highest urban cancer moralities per 1000 people, however looking into the types of cancer it seems to show that there is a prostate cancer epidemic in Saint Lucia that happens to line up with its urban population. The same can be seen in Barbados with their high rates of pancreatic cancer. While we weren’t able to find specific data on these epidemics, it stands to reason that they are more apparent in urban populations likely due to a higher presence of carcinogens such as smog and industrial runoff that would be more common in these urban areas.
 \
-| While we already knew this and the sentiment is quite common, our data did demonstrate that cancer deaths in particular occur among older populations. We could see this after importing a data set showing average age among countries that showed Europe as the oldest region in the world, aligning with our data that said cancer seems to be more common in Europe compared to the rest of the world. Notably, Japan was also one of the countries with higher rates of cancer as well as old age. This provides an area in which we could research more about these regions that have older populations and the reasons for it, such as higher qualities of life or perhaps lower rates of childbirth. There is also the aspect of healthcare, in both being able to diagnose and treat cancer. Some countries may have higher rates of unreported cancer deaths due to a lack of screening opportunities.
 \
-| Overall, one thing that we learned is that cancer is a multifaceted problem and has issues that span various factors from public health to urbanization to class. In our analyses and graphs from our questions on urbanization and age, we found that both seem to be directly related to higher rates of cancer deaths. 
+While we already knew this and the sentiment is quite common, our data did demonstrate that cancer deaths in particular occur among older populations. We could see this after importing a data set showing average age among countries that showed Europe as the oldest region in the world, aligning with our data that said cancer seems to be more common in Europe compared to the rest of the world. Notably, Japan was also one of the countries with higher rates of cancer as well as old age. This provides an area in which we could research more about these regions that have older populations and the reasons for it, such as higher qualities of life or perhaps lower rates of childbirth. There is also the aspect of healthcare, in both being able to diagnose and treat cancer. Some countries may have higher rates of unreported cancer deaths due to a lack of screening opportunities.
+\
+\
+Overall, one thing that we learned is that cancer is a multifaceted problem and has issues that span various factors from public health to urbanization to class. In our analyses and graphs from our questions on urbanization and age, we found that while urbanization is a treacherous factor in predicting high cancer deaths the latter seems to be highly related to higher rates of cancer deaths. 

@@ -410,12 +410,15 @@ cancer_pop %>%
 
 urban_cancer_growth %>% 
   filter(urban_population_growth > 15)
-```
-```{r}
+
+
 urban_cancer_growth %>% 
   ggplot(aes(x = urban_population_growth, y = death_rate))+
   geom_point()+
   geom_smooth()
+```
+```{r}
+
 ```
 
 
@@ -440,9 +443,96 @@ coef(summary(model_1))
 
 
 
-```{r creating a choropleth world map to see how rate of increase changed for countries over 2000-2017}
+```{r libraries to create maps}
+library("ggplot2")
+theme_set(theme_bw())
+library("sf")
+library("rnaturalearth")
+library("rnaturalearthdata")
+library(rgeos)
+library(ggspatial)
+library(maptools)
+library(leaflet)
+library(sf)
+library(tmap)
+library(rworldmap)
+library(RColorBrewer)
+library(tidyverse)     # for data cleaning and plotting
+library(googlesheets4) # for reading googlesheet data
+library(lubridate)     # for date manipulation
+library(openintro)     # for the abbr2state() function
+library(palmerpenguins)# for Palmer penguin data
+library(maps)          # for map data
+library(gplots)        # for col2hex() function
+library(ggmap)         # for mapping points on maps
+library(RColorBrewer)  # for color palettes
+library(ggthemes)  
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+class(world)
+```
+
+
+
+
+```{r}
+
+data1 <- cancer_pop %>% 
+  select(country, country_code, year, death, total_urban_population,death_per_urban, total_population, death_per_total) %>% 
+  filter(year %in% c(2017)) %>% 
+  arrange(desc(death_per_total))
+
+
+cancer2017 <- joinCountryData2Map(data1, 
+                                  joinCode = "ISO3",
+                                  nameJoinColumn = "country_code")
+
+
+cancer_world <- mapCountryData(cancer2017, 
+                            nameColumnToPlot="death_per_total",
+                            oceanCol = "azure2",
+                            catMethod = "categorical",
+                            missingCountryCol = gray(.8),
+                            colourPalette = c("green","yellow","orange","red") ,
+                            addLegend = F,
+                            mapTitle = "Cancer Deaths per 1,000 People World Wide in 2017 ",
+                            border = NA)
+
+#do.call(addMapLegend, c(cancer_world))
   
 
+
+```
+
+
+```{r}
+ #creating a user defined colour palette
+op <- palette(c("grey",'green','yellow','orange','red'))
+ #find quartile breaks
+cutVector <- quantile(cancer2017@data[["death_per_total"]],n = 6,na.rm=TRUE)
+ #classify the data to a factor
+cancer2017@data[["death_per_total"]] <- cut(cancer2017@data[["death_per_total"]],
+ cutVector,
+ include.lowest=TRUE )
+ #rename the categories
+ levels(cancer2017@data[["death_per_total"]]) <- c('vlow','low', 'med', 'high', 'vhigh')
+ #mapping
+ mapCountryData(cancer2017,
+ nameColumnToPlot= 'death_per_total',
+ catMethod='categorical',
+ mapTitle= 'Mapping',
+ colourPalette='palette',
+ oceanCol='lightblue',
+ addLegend = F,
+ missingCountryCol='white' )
+```
+
+
+```{r creating a choropleth world map to see how rate of increase changed for countries over 2000-2017}
+
+```
+
+```{r}
 
 ```
 
