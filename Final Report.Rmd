@@ -1,5 +1,5 @@
 ---
-title: "“Cancer: The Rising Mortality Rate in Relation to Urbanization and Aging Population Around the World” "
+title: "Cancer: The Rising Mortality Rate in Relation to Urbanization and Aging Population Around the World” 
 author: "Tam Nguyen, Ting Huang and Chris McConnell"
 output: 
   html_document:
